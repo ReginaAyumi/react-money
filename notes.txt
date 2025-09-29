@@ -1,0 +1,4 @@
+install packages
+1. recharts
+2. react-icons
+3. react-router-dom

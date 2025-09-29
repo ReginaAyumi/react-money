@@ -1,4 +1,3 @@
-// import React from "react";
 import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
 
 function MoneyChart({ transactions }) {
@@ -18,25 +17,28 @@ function MoneyChart({ transactions }) {
   const COLORS = ["#4CAF50", "#F44336"];
 
   return (
-    <div>
+    <div className="card">
       <h2>Money Visualization</h2>
-      <PieChart width={300} height={300}>
-        <Pie
-          data={data}
-          dataKey="value"
-          nameKey="name"
-          cx="50%"
-          cy="50%"
-          outerRadius={100}
-          label
-        >
-          {data.map((entry, index) => (
-            <Cell key={index} fill={COLORS[index]} />
-          ))}
-        </Pie>
-        <Tooltip />
-        <Legend />
-      </PieChart>
+      <div className="center">
+        <PieChart width={300} height={300}>
+          <Pie
+            data={data}
+            dataKey="value"
+            nameKey="name"
+            cx="50%"
+            cy="50%"
+            outerRadius={100}
+            label
+          >
+            {data.map((entry, index) => (
+              <Cell key={index} fill={COLORS[index]} />
+            ))}
+          </Pie>
+          <Tooltip />
+          <Legend />
+        </PieChart>
+      </div>
+      
     </div>
   );
 }

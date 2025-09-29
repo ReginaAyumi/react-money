@@ -4,6 +4,9 @@ function MoneyTracker({ addTransaction }) {
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
   const [type, setType] = useState("income");
+  const [date, setDate] = useState(
+    new Date().toISOString().split("T")[0] // default hari ini (yyyy-mm-dd)
+  );
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -14,14 +17,16 @@ function MoneyTracker({ addTransaction }) {
       description,
       amount: parseFloat(amount),
       type,
+      date: new Date(date), // simpan object Date
     });
 
     setDescription("");
     setAmount("");
+    setDate(new Date().toISOString().split("T")[0]); // reset ke hari ini
   };
 
   return (
-    <div className="card">
+    <div className="add-transaction-card">
       <h2>Add Transaction</h2>
       <form onSubmit={handleSubmit}>
         <input
@@ -40,6 +45,11 @@ function MoneyTracker({ addTransaction }) {
           <option value="income">Income</option>
           <option value="expense">Expense</option>
         </select>
+        <input
+          type="date"
+          value={date}
+          onChange={(e) => setDate(e.target.value)}
+        />
         <button type="submit">Add</button>
       </form>
     </div>

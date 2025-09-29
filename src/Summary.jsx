@@ -10,7 +10,7 @@ function Summary({ transactions }) {
   const balance = totalIncome - totalExpense;
 
   return (
-    <div className="card summary">
+    <div className="summary">
       <h2>Summary</h2>
       <p>Income: {totalIncome}</p>
       <p>Expense: {totalExpense}</p>
