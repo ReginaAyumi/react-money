@@ -1,37 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 
-function TransactionList() {
-  const [transactions, setTransactions] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchTransactions = async () => {
-      try {
-        const res = await fetch("/transactions.json");
-        const data = await res.json();
-        setTransactions(data);
-      } catch (err) {
-        console.error("Error fetching transactions:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchTransactions();
-  }, []);
-
-  if (loading) return <p>Loading transactions...</p>;
+function TransactionList({ transactions}) {
 
   return (
     <div className="card">
       <h2>Transaction List</h2>
       <ul>
-        {transactions.map((t) => (
-          <li key={t.id} className={t.type}>
-            {t.description} - Rp {t.amount.toLocaleString()} ({t.type}) |{" "}
-            {new Date(t.date).toLocaleDateString()}
-          </li>
-        ))}
+        {transactions.length === 0 ? (
+          <p>No transactions found.</p>
+        ) : (
+          transactions.map((t) => (
+            <li key={t.id} className={t.type}>
+              {t.description} - Rp {t.amount.toLocaleString()} ({t.type}) |{" "}
+              {new Date(t.date).toLocaleDateString()}{" "}
+            </li>
+          ))
+        )}
       </ul>
     </div>
   );

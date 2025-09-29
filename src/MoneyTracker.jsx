@@ -5,7 +5,7 @@ function MoneyTracker({ addTransaction }) {
   const [amount, setAmount] = useState("");
   const [type, setType] = useState("income");
   const [date, setDate] = useState(
-    new Date().toISOString().split("T")[0] // default hari ini (yyyy-mm-dd)
+    new Date().toISOString().split("T")[0] // default (yyyy-mm-dd)
   );
 
   const handleSubmit = (e) => {
@@ -17,12 +17,12 @@ function MoneyTracker({ addTransaction }) {
       description,
       amount: parseFloat(amount),
       type,
-      date: new Date(date), // simpan object Date
+      date: new Date(date),
     });
 
     setDescription("");
     setAmount("");
-    setDate(new Date().toISOString().split("T")[0]); // reset ke hari ini
+    setDate(new Date().toISOString().split("T")[0]); // reset to today
   };
 
   return (

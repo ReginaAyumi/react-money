@@ -1,12 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 function TransactionFilter({ transactions, onFilter }) {
   const [filter, setFilter] = useState("all");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
-  // fungsi filter
-  const applyFilter = () => {
+  // apply filter with callback
+  const applyFilter = useCallback(() => {
     const now = new Date();
     const filtered = transactions.filter((t) => {
       const txDate = new Date(t.date);
@@ -43,42 +43,41 @@ function TransactionFilter({ transactions, onFilter }) {
     });
 
     onFilter(filtered);
-  };
+  }, [transactions, filter, startDate, endDate, onFilter]);
 
-  // jalankan filter tiap kali state berubah
+  // jalankan filter tiap kali dependensi berubah
   useEffect(() => {
     applyFilter();
-  }, [transactions, filter, startDate, endDate]);
+  }, [applyFilter]);
 
   return (
     <div className="">
       <h3>Filter Transactions</h3>
       <div className="center">
         <select value={filter} onChange={(e) => setFilter(e.target.value)}>
-            <option value="all">All</option>
-            <option value="week">This Week</option>
-            <option value="month">This Month</option>
-            <option value="custom">Custom</option>
+          <option value="all">All</option>
+          <option value="week">This Week</option>
+          <option value="month">This Month</option>
+          <option value="custom">Custom</option>
         </select>
       </div>
-      
+
       <div className="center">
         {filter === "custom" && (
-            <div>
+          <div>
             <input
-                type="date"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
+              type="date"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
             />
             <input
-                type="date"
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
+              type="date"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
             />
-            </div>
+          </div>
         )}
       </div>
-      
     </div>
   );
 }

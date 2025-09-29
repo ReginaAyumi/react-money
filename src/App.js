@@ -15,10 +15,15 @@ function App() {
 
   const addTransaction = (transaction) => {
     setTransactions([...transactions, transaction]);
+    setFilteredTransactions([...filteredTransactions, transaction]); // biar ikut update filter
   };
 
   const deleteTransaction = (id) => {
-    setTransactions(transactions.filter((t) => t.id !== id));
+    const updated = transactions.filter((t) => t.id !== id);
+    setTransactions(updated);
+
+    const updatedFiltered = filteredTransactions.filter((t) => t.id !== id);
+    setFilteredTransactions(updatedFiltered);
   };
 
   return (
@@ -33,41 +38,48 @@ function App() {
         <Routes>
           {/* Main page */}
           <Route path="/" element={
-              <>
-                {/* Box Add Transaction */}
-                <div className="card full-width">
-                  <MoneyTracker addTransaction={addTransaction} />
+            <>
+              <div className="card full-width">
+                <MoneyTracker addTransaction={addTransaction} />
+              </div>
+
+              <div className="card main-container">
+                <TransactionFilter
+                  transactions={transactions}
+                  onFilter={setFilteredTransactions}
+                />
+
+                <div className="summary-center">
+                  <Summary transactions={filteredTransactions} />
                 </div>
 
-                {/* Container for Filter + Summary + TransactionList + Chart */}
-                <div className="card main-container">
-                  <TransactionFilter transactions={transactions} onFilter={setFilteredTransactions}
-                  />
-
-                  <div className="summary-center">
-                    <Summary transactions={filteredTransactions} />
+                <div className="row">
+                  <div className="half">
+                    <TransactionList
+                      transactions={filteredTransactions}
+                      onDelete={deleteTransaction}
+                    />
+                    <Link to="/details">
+                      <button className="btn-detail">More Detail</button>
+                    </Link>
                   </div>
-
-                  <div className="row">
-                    <div className="half">
-                      <TransactionList transactions={filteredTransactions} onDelete={deleteTransaction} />
-                      <Link to="/details">
-                        <button className="btn-detail">More Detail</button>
-                      </Link>
-                    </div>
-                    <div className="half">
-                      <MoneyChart transactions={filteredTransactions} />
-                    </div>
+                  <div className="half">
+                    <MoneyChart transactions={filteredTransactions} />
                   </div>
                 </div>
-              </>
-            }
-          />
+              </div>
+            </>
+          } />
 
-          {/* detail transaction page */}
+          {/* Detail page */}
           <Route
             path="/details"
-            element={<TransactionDetailPage transactions={filteredTransactions} onDelete={deleteTransaction} />}
+            element={
+              <TransactionDetailPage
+                transactions={filteredTransactions}
+                onDelete={deleteTransaction}
+              />
+            }
           />
         </Routes>
       </div>
