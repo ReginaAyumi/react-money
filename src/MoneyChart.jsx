@@ -16,6 +16,27 @@ function MoneyChart({ transactions }) {
 
   const COLORS = ["#4CAF50", "#F44336"];
 
+  const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, value }) => {
+    const RADIAN = Math.PI / 180;
+    const radius = innerRadius + (outerRadius - innerRadius) / 2;
+    const x = cx + radius * Math.cos(-midAngle * RADIAN);
+    const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+    return (
+      <text
+        x={x}
+        y={y}
+        fill="white"
+        textAnchor="middle"
+        dominantBaseline="central"
+        fontSize={14}
+        fontWeight="bold"
+      >
+        {value.toLocaleString()}
+      </text>
+    );
+  };
+
   return (
     <div className="card">
       <h2>Money Visualization</h2>
@@ -28,7 +49,7 @@ function MoneyChart({ transactions }) {
             cx="50%"
             cy="50%"
             outerRadius={100}
-            label
+            label={renderCustomizedLabel}
           >
             {data.map((entry, index) => (
               <Cell key={index} fill={COLORS[index]} />
@@ -38,7 +59,6 @@ function MoneyChart({ transactions }) {
           <Legend />
         </PieChart>
       </div>
-      
     </div>
   );
 }

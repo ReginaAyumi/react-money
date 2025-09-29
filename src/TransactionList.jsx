@@ -11,8 +11,8 @@ function TransactionList({ transactions}) {
         ) : (
           transactions.map((t) => (
             <li key={t.id} className={t.type}>
-              {t.description} - Rp {t.amount.toLocaleString()} ({t.type}) |{" "}
-              {new Date(t.date).toLocaleDateString()}{" "}
+              {new Date(t.date).toLocaleDateString()}{" "}| {" "}
+              {t.description} - Rp {t.amount.toLocaleString()} ({t.type}) 
             </li>
           ))
         )}

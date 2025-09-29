@@ -45,7 +45,7 @@ function TransactionFilter({ transactions, onFilter }) {
     onFilter(filtered);
   }, [transactions, filter, startDate, endDate, onFilter]);
 
-  // jalankan filter tiap kali dependensi berubah
+  // run filter everytime filter changes
   useEffect(() => {
     applyFilter();
   }, [applyFilter]);
@@ -65,16 +65,8 @@ function TransactionFilter({ transactions, onFilter }) {
       <div className="center">
         {filter === "custom" && (
           <div>
-            <input
-              type="date"
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
-            />
-            <input
-              type="date"
-              value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
-            />
+            <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
+            <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
           </div>
         )}
       </div>

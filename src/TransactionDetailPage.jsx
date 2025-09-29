@@ -1,4 +1,3 @@
-import React from "react";
 import { Link } from "react-router-dom";
 
 function TransactionDetailPage({ transactions, onDelete }) {
@@ -11,17 +10,14 @@ function TransactionDetailPage({ transactions, onDelete }) {
         ) : (
           transactions.map((t) => (
             <li key={t.id} className={t.type}>
-              <strong>{t.description}</strong> - {t.amount} ({t.type}) |{" "}
-              {new Date(t.date).toLocaleDateString()}
-              <button
-                className="btn-delete"
+              {new Date(t.date).toLocaleDateString()} {" "} | {" "} {t.description} - {t.amount} ({t.type})
+              <button className="btn-delete"
                 onClick={() => {
                   if (window.confirm("Are you sure you want to delete this transaction?")) {
                     onDelete(t.id);
                   }
                 }}
-              >
-                Delete
+              > Delete
               </button>
             </li>
           ))
