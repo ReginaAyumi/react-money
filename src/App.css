@@ -40,10 +40,6 @@ h1 {
   background-color: #1976D2;
 }
 
-.full-width {
-  margin-bottom: 20px;
-}
-
 .row {
   display: flex;
   gap: 20px;

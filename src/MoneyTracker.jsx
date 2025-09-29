@@ -5,7 +5,7 @@ function MoneyTracker({ addTransaction }) {
   const [amount, setAmount] = useState("");
   const [type, setType] = useState("income");
   const [date, setDate] = useState(
-    new Date().toISOString().split("T")[0] // default (yyyy-mm-dd)
+    new Date().toISOString().split("T")[0] // yyyy-mm-dd
   );
 
   const handleSubmit = (e) => {
