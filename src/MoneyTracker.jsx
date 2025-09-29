@@ -1,107 +1,73 @@
-import React, { useState, useMemo } from "react";
+import React, { useState } from "react";
 
-export default function MoneyTracker() {
-  const [transactions, setTransactions] = useState([]);
-  const [form, setForm] = useState({
-    type: "income",
-    amount: "",
-    note: "",
-  });
+function MoneyTracker({ transactions, addTransaction }) {
+  const [description, setDescription] = useState("");
+  const [amount, setAmount] = useState("");
+  const [type, setType] = useState("income");
 
-  // Hitung total income, expense, dan net
-  const totals = useMemo(() => {
-    let income = 0,
-      expense = 0;
-    transactions.forEach((t) => {
-      if (t.type === "income") income += Number(t.amount);
-      else expense += Number(t.amount);
-    });
-    return { income, expense, net: income - expense };
-  }, [transactions]);
-
-  function handleAdd(e) {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    const amount = Number(form.amount);
-    if (!amount || amount <= 0) return alert("Masukkan jumlah uang yang valid (lebih besar dari 0)");
+    if (!description || !amount) return;
 
-    const newT = {
-      id: Date.now().toString(),
-      type: form.type,
-      amount: amount,
-      note: form.note,
-    };
+    addTransaction({
+      id: Date.now(),
+      description,
+      amount: parseFloat(amount),
+      type,
+    });
 
-    setTransactions((s) => [newT, ...s]);
-    setForm({ type: "income", amount: "", note: "" });
-  }
+    setDescription("");
+    setAmount("");
+  };
+
+  const totalIncome = transactions
+    .filter((t) => t.type === "income")
+    .reduce((acc, curr) => acc + curr.amount, 0);
+
+  const totalExpense = transactions
+    .filter((t) => t.type === "expense")
+    .reduce((acc, curr) => acc + curr.amount, 0);
+
+  const balance = totalIncome - totalExpense;
 
   return (
     <div>
-      <h1>Aplikasi Pemasukan & Pengeluaran</h1>
-
-      <h2>Ringkasan</h2>
-      <p>Total Income: Rp {totals.income.toLocaleString()}</p>
-      <p>Total Expense: Rp {totals.expense.toLocaleString()}</p>
-      <p>Saldo: Rp {totals.net.toLocaleString()}</p>
-
-      <h2>Tambah Transaksi</h2>
-      <form onSubmit={handleAdd}>
-        <div>
-          <label>
-            <input
-              type="radio"
-              name="type"
-              value="income"
-              checked={form.type === "income"}
-              onChange={() => setForm((f) => ({ ...f, type: "income" }))}
-            />
-            Income
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="type"
-              value="expense"
-              checked={form.type === "expense"}
-              onChange={() => setForm((f) => ({ ...f, type: "expense" }))}
-            />
-            Expense
-          </label>
-        </div>
-
-        <div>
-          <label>Jumlah (Rp): </label>
-          <input
-            type="number"
-            value={form.amount}
-            onChange={(e) => setForm((f) => ({ ...f, amount: e.target.value }))}
-          />
-        </div>
-
-        <div>
-          <label>Catatan: </label>
-          <input
-            type="text"
-            value={form.note}
-            onChange={(e) => setForm((f) => ({ ...f, note: e.target.value }))}
-          />
-        </div>
-
-        <button type="submit">Tambah</button>
+      <h2>Money Tracker</h2>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          placeholder="Description"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+        />
+        <input
+          type="number"
+          placeholder="Total"
+          value={amount}
+          onChange={(e) => setAmount(e.target.value)}
+        />
+        <select value={type} onChange={(e) => setType(e.target.value)}>
+          <option value="income">Income</option>
+          <option value="expense">Expense</option>
+        </select>
+        <button type="submit">Add</button>
       </form>
 
-      <h2>Daftar Transaksi</h2>
-      {transactions.length === 0 ? (
-        <p>Belum ada transaksi.</p>
-      ) : (
-        <ul>
-          {transactions.map((t) => (
-            <li key={t.id}>
-              {t.type.toUpperCase()} - Rp {t.amount.toLocaleString()} ({t.note || "-"})
-            </li>
-          ))}
-        </ul>
-      )}
+      <h3>Ringkasan</h3>
+      <p>Income: {totalIncome}</p>
+      <p>Expense: {totalExpense}</p>
+      <p>Balance: {balance}</p>
+
+      <h3>Transaction List</h3>
+      <ul>
+        {transactions.map((t) => (
+          <li key={t.id}>
+            {t.description} - {t.amount} ({t.type})
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
+
+export default MoneyTracker;
