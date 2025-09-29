@@ -11,15 +11,15 @@ function MoneyChart({ transactions }) {
     .reduce((acc, curr) => acc + curr.amount, 0);
 
   const data = [
-    { name: "Pemasukan", value: totalIncome },
-    { name: "Pengeluaran", value: totalExpense },
+    { name: "Income", value: totalIncome },
+    { name: "Expense", value: totalExpense },
   ];
 
   const COLORS = ["#4CAF50", "#F44336"];
 
   return (
     <div>
-      <h2>Visualisasi Keuangan</h2>
+      <h2>Money Visualization</h2>
       <PieChart width={300} height={300}>
         <Pie
           data={data}

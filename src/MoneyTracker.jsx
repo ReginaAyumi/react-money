@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-function MoneyTracker({ transactions, addTransaction }) {
+function MoneyTracker({ addTransaction }) {
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
   const [type, setType] = useState("income");
@@ -20,19 +20,9 @@ function MoneyTracker({ transactions, addTransaction }) {
     setAmount("");
   };
 
-  const totalIncome = transactions
-    .filter((t) => t.type === "income")
-    .reduce((acc, curr) => acc + curr.amount, 0);
-
-  const totalExpense = transactions
-    .filter((t) => t.type === "expense")
-    .reduce((acc, curr) => acc + curr.amount, 0);
-
-  const balance = totalIncome - totalExpense;
-
   return (
-    <div>
-      <h2>Money Tracker</h2>
+    <div className="card">
+      <h2>Add Transaction</h2>
       <form onSubmit={handleSubmit}>
         <input
           type="text"
@@ -52,20 +42,6 @@ function MoneyTracker({ transactions, addTransaction }) {
         </select>
         <button type="submit">Add</button>
       </form>
-
-      <h3>Ringkasan</h3>
-      <p>Income: {totalIncome}</p>
-      <p>Expense: {totalExpense}</p>
-      <p>Balance: {balance}</p>
-
-      <h3>Transaction List</h3>
-      <ul>
-        {transactions.map((t) => (
-          <li key={t.id}>
-            {t.description} - {t.amount} ({t.type})
-          </li>
-        ))}
-      </ul>
     </div>
   );
 }
