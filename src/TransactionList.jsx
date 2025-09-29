@@ -1,27 +1,35 @@
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 
-function TransactionList({ transactions, onDelete }) {
-  const handleDelete = (id) => {
-    const confirmDelete = window.confirm("Do you want to delete this transaction?");
-    if (confirmDelete) {
-      onDelete(id);
-      alert("Transaction deleted successfully!");
-    }
-  };
+function TransactionList() {
+  const [transactions, setTransactions] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const latestTransactions = [...transactions]
-    .sort((a, b) => new Date(b.date) - new Date(a.date))
-    .slice(0, 5);
+  useEffect(() => {
+    const fetchTransactions = async () => {
+      try {
+        const res = await fetch("/transactions.json");
+        const data = await res.json();
+        setTransactions(data);
+      } catch (err) {
+        console.error("Error fetching transactions:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTransactions();
+  }, []);
+
+  if (loading) return <p>Loading transactions...</p>;
 
   return (
     <div className="card">
       <h2>Transaction List</h2>
       <ul>
-        {latestTransactions.map((t) => (
+        {transactions.map((t) => (
           <li key={t.id} className={t.type}>
-            {t.description} - {t.amount} ({t.type}) |{" "}
-            {new Date(t.date).toLocaleDateString()}{" "}
-            <button onClick={() => handleDelete(t.id)}>Delete</button>
+            {t.description} - Rp {t.amount.toLocaleString()} ({t.type}) |{" "}
+            {new Date(t.date).toLocaleDateString()}
           </li>
         ))}
       </ul>
